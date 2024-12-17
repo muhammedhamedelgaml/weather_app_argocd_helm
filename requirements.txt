@@ -1,0 +1,11 @@
+Flask
+requests
+matplotlib
+
+# sudo apt install python3-pip
+# python3 -m pip --version
+# source venv/bin/activate
+# pip install matplotlib
+
+
+#pip install -r requirements.txt
