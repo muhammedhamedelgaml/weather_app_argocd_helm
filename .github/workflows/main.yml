@@ -54,9 +54,9 @@ jobs:
         uses: slackapi/slack-github-action@v1.24.0
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          channel: '#cicdjenkins'
+          channel: '#weatherapp'
           text: |
             *${{ job.status | uppercase }}:* Job ${{ github.repository }} build ${{ github.run_number }}
-            for more info visit: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            For more info, visit: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         env:
-          SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'failure' && 'danger' || 'warning' }}
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || (job.status == 'failure' && 'danger' || 'warning') }}
