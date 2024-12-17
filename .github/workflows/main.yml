@@ -53,9 +53,12 @@ jobs:
       - name: Set Slack color
         id: set_color
         run: |
-          if [ "${{ job.status }}" == "success" ]; then echo "SLACK_COLOR=good" >> $GITHUB_ENV;
-          elif [ "${{ job.status }}" == "failure" ]; then echo "SLACK_COLOR=danger" >> $GITHUB_ENV;
-          else echo "SLACK_COLOR=warning" >> $GITHUB_ENV;
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "SLACK_COLOR=good" >> $GITHUB_ENV
+          elif [ "${{ job.status }}" == "failure" ]; then
+            echo "SLACK_COLOR=danger" >> $GITHUB_ENV
+          else
+            echo "SLACK_COLOR=warning" >> $GITHUB_ENV
           fi
 
       - name: Send Slack notification
@@ -64,7 +67,7 @@ jobs:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel: '#cicdjenkins'
           text: |
-            *${{ job.status | toUpperCase }}:* Job ${{ github.repository }} build ${{ github.run_number }}
+            *${{ job.status }}:* Job ${{ github.repository }} build ${{ github.run_number }}
             For more info, visit: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         env:
           SLACK_COLOR: ${{ env.SLACK_COLOR }}
