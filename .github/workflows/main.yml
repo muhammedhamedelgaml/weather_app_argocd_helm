@@ -45,29 +45,21 @@ jobs:
       #       IMAGE=${{ env.IMAGE_NAME }}
       #       TAG=${{ github.run_number }}
       
-      
+
   notify:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Set Slack color
-        id: set_color
-        run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "SLACK_COLOR=good" >> $GITHUB_ENV
-          elif [ "${{ job.status }}" == "failure" ]; then
-            echo "SLACK_COLOR=danger" >> $GITHUB_ENV
-          else
-            echo "SLACK_COLOR=warning" >> $GITHUB_ENV
-          fi
-
       - name: Send Slack notification
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          channel: '#cicdjenkins'
-          text: |
+          botToken: ${{ secrets.SLACK_TOKEN }}
+          channel-id: '#weatherapp'
+          slack-message: |
             *${{ job.status }}:* Job ${{ github.repository }} build ${{ github.run_number }}
             For more info, visit: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         env:
-          SLACK_COLOR: ${{ env.SLACK_COLOR }}
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'failure' && 'danger' || 'warning' }}
+
+    
+
