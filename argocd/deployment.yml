@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: weather-app
-        image: muhammedhamedelgaml/app_python:31
+        image: muhammedhamedelgaml/app_python:32
         resources:
           limits:
             memory: "128Mi"
