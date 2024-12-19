@@ -41,7 +41,7 @@ pipeline {
                     """
                     // Commit the changes to Git
                     sh """
-                        git add deployment.yaml
+                        git add argocd/deployment.yml
                         git commit -m "Update image tag to $IMAGE_TAG"
                         git push 
                     """
