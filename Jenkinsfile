@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        sed -i 's|image:.*|image: $IMAGE_NAME:$IMAGE_TAG|' /argocd/deployment.yml
+                        sed -i 's|image:.*|image: $IMAGE_NAME:$IMAGE_TAG|' argocd/deployment.yml
                     """
                     // Commit the changes to Git
                     sh """
