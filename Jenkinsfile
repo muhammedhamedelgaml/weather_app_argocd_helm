@@ -4,10 +4,51 @@ pipeline {
     environment{
     ARGOCD_SERVER = "localhost:8082" 
     APP_NAME = "weather"
+    IMAGE_NAME = "muhammedhamedelgaml/app_python"
+    IMAGE_TAG = "31"
+
     }
     
 
     stages {        
+        // stage('Build image') {
+        //     steps {
+        //         script {
+        //               echo "BUILD DONE"
+        //               sh ' docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} . '
+        //         }
+        //     }
+        // }
+
+        // stage('Push image') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {   
+        //             sh '''
+        //                 docker login --username $USERNAME --password $PASSWORD
+        //                 docker push ${IMAGE_NAME}:${BUILD_NUMBER}
+
+        //             '''
+
+        //         }
+        //     }
+        // }
+
+        stage('Update Image Tag') {
+            steps {
+                script {
+                    sh """
+                        sed -i 's|image:.*|image: $IMAGE_NAME:$IMAGE_TAG|' deployment.yaml
+                    """
+                    // Commit the changes to Git
+                    sh """
+                        git add deployment.yaml
+                        git commit -m "Update image tag to $IMAGE_TAG"
+                        git push 
+                    """
+                }
+            }
+        }        
+
         stage('authenticate with ArgoCD') {
             steps {
                 script {
