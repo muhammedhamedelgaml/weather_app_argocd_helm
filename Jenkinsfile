@@ -41,8 +41,6 @@ pipeline {
                     """
                     // Commit the changes to Git
                     sh """
-                        git config --global user.email "muhammedhamedelgaml@gmail.com"
-                        git config --global user.name "muhammedhamedelgaml"
                         git checkout main
                         git add argocd/deployment.yml
                         git commit -m "Update image tag to $IMAGE_TAG"
