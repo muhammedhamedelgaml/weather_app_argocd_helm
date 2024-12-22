@@ -33,22 +33,36 @@ pipeline {
         //     }
         // }
 
-        stage('Update Image Tag') {
+        //stage('Update Image Tag using sed ') {
+            // 1- using sed 
+            // steps {
+            //     script {
+            //         sh """
+            //             sed -i 's|image:.*|image: $IMAGE_NAME:$IMAGE_TAG|' argocd/deployment.yml
+            //         """
+            //         // Commit the changes to Git
+            //         sh """
+            //             git add argocd/deployment.yml
+            //             git commit -m "Update image tag to $IMAGE_TAG"
+            //             git push origin main
+            //         """
+            //     }
+            // }
+             
+        //}        
+
+       stage('Update Image Tag using helm ') {
+         //   1- using helm 
             steps {
                 script {
-                    sh """
-                        sed -i 's|image:.*|image: $IMAGE_NAME:$IMAGE_TAG|' argocd/deployment.yml
-                    """
-                    // Commit the changes to Git
-                    sh """
-                        git add argocd/deployment.yml
-                        git commit -m "Update image tag to $IMAGE_TAG"
-                        git push origin main
-                    """
+                    sh '''
+                  helm upgrade --install weather-app helm/weathercharts \
+                  --set image=${IMAGE_NAME}:${IMAGE_TAG} \
+                    '''
                 }
             }
-        }        
-
+             
+       } 
         stage('authenticate with ArgoCD') {
             steps {
                 script {
@@ -62,12 +76,13 @@ pipeline {
 }
         stage('create APP') {
             steps {
-                script {
+                script {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                     // Create the ArgoCD app
                     sh '''
                     argocd app create $APP_NAME \
                         --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
-                        --path argocd \
+                        // --path argocd \
+                        --path helm/weathercharts/templates \
                         --dest-server https://kubernetes.default.svc \
                         --dest-namespace default
                     '''
@@ -79,7 +94,7 @@ pipeline {
             steps {
                 script {
                     // Resync the ArgoCD app
-                    sh 'argocd app sync weather3'
+                    sh 'argocd app sync $APP_NAME '
                 }
             }
         }
