@@ -69,7 +69,6 @@ pipeline {
                     sh '''
                     argocd app create $APP_NAME \
                         --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
-                        // --path argocd \
                         --path helm/weathercharts \
                         --helm-set image=muhammedhamedelgaml/app_python:31 \
                         --dest-server https://kubernetes.default.svc \
