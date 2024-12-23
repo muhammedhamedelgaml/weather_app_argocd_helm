@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                  helm  install weather-app helm/weathercharts \
+                  helm upgrade install weather-app helm/weathercharts \
                   --set image=${IMAGE_NAME}:${IMAGE_TAG} \
                     '''
                 }
