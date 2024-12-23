@@ -45,7 +45,13 @@ This Jenkins pipeline contains the following stages:
 ### 4. Create App in ArgoCD
 - **Description**: Creates a new ArgoCD application that uses the newly built Docker image.
 - **Commands**:
-  - `argocd app create $APP_NAME ...`
+  - `argocd app create $APP_NAME \
+     --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
+     --path helm/weathercharts \
+     --helm-set image=${IMAGE_NAME}:${BUILD_NUMBER} \
+     --dest-server https://kubernetes.default.svc \
+     --dest-namespace default
+`
   - This includes specifying the Helm chart repository, path to the chart, the image, and the Kubernetes namespace.
 
 ### 5. Resync the Application
