@@ -99,3 +99,8 @@ A Slack notification will be sent after the pipeline run to report the build sta
 Example of a notification:
 ![SLACK ](/screenshots/slack.png)
 
+## Argocd screenshot
+![Argocd](/screenshots/argocd.png)
+
+
+ee
