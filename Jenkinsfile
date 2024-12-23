@@ -5,8 +5,6 @@ pipeline {
     ARGOCD_SERVER = "localhost:8082" 
     APP_NAME = "weather"
     IMAGE_NAME = "muhammedhamedelgaml/app_python"
-    IMAGE_TAG = "31"
-
     }
     
 
@@ -70,7 +68,7 @@ pipeline {
                     argocd app create $APP_NAME \
                         --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
                         --path helm/weathercharts \
-                        --helm-set image=${IMAGE_NAME}:${IMAGE_TAG} \
+                        --helm-set image=${IMAGE_NAME}:${BUILD_NUMBER} \
                         --dest-server https://kubernetes.default.svc \
                         --dest-namespace default
                     '''
