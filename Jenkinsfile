@@ -1,3 +1,8 @@
+def COLOR_MAP = [
+  'SUCCESS' : 'good',
+  'FAILURE' : 'danger'
+]
+
 pipeline {
     agent any
 
@@ -68,7 +73,7 @@ pipeline {
                     argocd app create $APP_NAME \
                         --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
                         --path helm/weathercharts \
-                        --helm-set image=${IMAGE_NAME}:${BUILD_NUMBER} \
+                        --helm-set image=muhammedhamedelgaml/app_python:31 \
                         --dest-server https://kubernetes.default.svc \
                         --dest-namespace default
                     '''
@@ -85,6 +90,20 @@ pipeline {
             }
         }
 
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished! \n logging out from docker'
+            sh 'docker logout'
+
+              
+            echo 'slack notification.'
+            slackSend channel: '#cicdjenkins',
+            color:  COLOR_MAP[currentBuild.currentResult],
+            message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n for more info visit : ${env.BUILD_URL} " 
+        
+        }
     }
 
 }
