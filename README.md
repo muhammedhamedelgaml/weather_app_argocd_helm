@@ -12,12 +12,13 @@ This repository contains the Jenkins pipeline for building, pushing Docker image
 ## Prerequisites
 
 Before running the pipeline, ensure the following:
-
+- **Helm Chart** you can crate it by `helm create  <chart_name>` then replace template file with your template
 - **Docker** is installed on the Jenkins agent for building and pushing images.
 - **ArgoCD** is set up and accessible on the `ARGOCD_SERVER` (default is `localhost:8082`).
 - **Docker Hub credentials** are stored in Jenkins under the credential ID `dockerhub`.
 - **ArgoCD credentials** are stored in Jenkins under the credential ID `argocdcred`.
 - A **Slack webhook** and credentials should be configured in Jenkins to send build notifications.
+
 
 ## Pipeline Overview
 
@@ -102,5 +103,3 @@ Example of a notification:
 ## Argocd screenshot
 ![Argocd](/screenshots/argocd.png)
 
-
-ee
