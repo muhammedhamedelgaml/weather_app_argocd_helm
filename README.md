@@ -97,4 +97,5 @@ A Slack notification will be sent after the pipeline run to report the build sta
 - Build URL for more information
 
 Example of a notification:
+![SLACK ](/screenshots/slack.png)
 
