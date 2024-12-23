@@ -51,18 +51,6 @@ pipeline {
              
         //}        
 
-       stage('Update Image Tag using helm ') {
-         //   1- using helm 
-            steps {
-                script {
-                    sh '''
-                  helm upgrade --install weather-app helm/weathercharts \
-                  --set image=${IMAGE_NAME}:${IMAGE_TAG} \
-                    '''
-                }
-            }
-             
-       } 
         stage('authenticate with ArgoCD') {
             steps {
                 script {
@@ -82,7 +70,8 @@ pipeline {
                     argocd app create $APP_NAME \
                         --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
                         // --path argocd \
-                        --path helm/weathercharts/templates \
+                        --path helm/weathercharts \
+                        --helm-set image=muhammedhamedelgaml/app_python:31 \
                         --dest-server https://kubernetes.default.svc \
                         --dest-namespace default
                     '''
