@@ -14,27 +14,27 @@ pipeline {
     
 
     stages {        
-        // stage('Build image') {
-        //     steps {
-        //         script {
-        //               echo "BUILD DONE"
-        //               sh ' docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} . '
-        //         }
-        //     }
-        // }
+        stage('Build image') {
+            steps {
+                script {
+                      echo "BUILD DONE"
+                      sh ' docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} . '
+                }
+            }
+        }
 
-        // stage('Push image') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {   
-        //             sh '''
-        //                 docker login --username $USERNAME --password $PASSWORD
-        //                 docker push ${IMAGE_NAME}:${BUILD_NUMBER}
+        stage('Push image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {   
+                    sh '''
+                        docker login --username $USERNAME --password $PASSWORD
+                        docker push ${IMAGE_NAME}:${BUILD_NUMBER}
 
-        //             '''
+                    '''
 
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
 
         //stage('Update Image Tag using sed ') {
             // 1- using sed 
@@ -73,7 +73,7 @@ pipeline {
                     argocd app create $APP_NAME \
                         --repo https://github.com/muhammedhamedelgaml/weather_app_argocd_helm.git\
                         --path helm/weathercharts \
-                        --helm-set image=muhammedhamedelgaml/app_python:31 \
+                        --helm-set image=${IMAGE_NAME}:${BUILD_NUMBER} \
                         --dest-server https://kubernetes.default.svc \
                         --dest-namespace default
                     '''
